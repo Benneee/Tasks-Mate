@@ -1,0 +1,16 @@
+* {
+  box-align: border-box;
+  color: white;
+}
+
+body {
+  background: black;
+}
+
+.time,
+.date {
+  color: rgb(20, 125, 160);
+  font-weight: bold;
+  padding: 15px;
+  font-size: 1.5em;
+}
