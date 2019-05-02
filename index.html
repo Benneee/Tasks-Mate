@@ -10,6 +10,8 @@
     rel="stylesheet"
     integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN"
     crossorigin="anonymous" />
+  <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.css"> -->
+
   <link rel="stylesheet" href="style.css">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Taks Mate</title>
@@ -38,6 +40,11 @@
                   <input type="text" name="task" id="task">
                   <label for="task"> New Task </label>
                 </div>
+                <div class="input-field col s12">
+                  <textarea name="task-detail" id="task-detail"
+                    class="materialize-textarea"></textarea>
+                  <label for="task-detail">Add task details</label>
+                </div>
                 <input type="submit" value="Add Task" class="btn">
               </form>
             </div>
@@ -48,7 +55,12 @@
               <input type="text" name="filter" id="filter">
               <label for="filter"> Filter Task </label>
             </div>
-            <ul class="collection"></ul>
+            <ul class="collection collapsible expandable">
+              <li>
+                <div class="collapsible-header">First</div>
+                <div class="collapsible-body"><span>Lorem ipsum dolor sit amet.</span></div>
+              </li>
+            </ul>
             <a href="#" class="clear-tasks btn blue">
               Clear Tasks
             </a>
