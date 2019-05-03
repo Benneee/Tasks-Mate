@@ -22,16 +22,16 @@ class UI {
 
     // So we can have the collapsible effect thingy
     // We create two divs and add the classes and spans and all else that is needed
-    let divTaskValue = document.createElement('div'); // First div for the task;
+    let divTaskValue = document.createElement('span'); // First div for the task;
     divTaskValue.className = 'collapsible-header';
     divTaskValue.appendChild(document.createTextNode(task.taskValue));
 
-    let divTaskDetail = document.createElement('div');
+    let divTaskDetail = document.createElement('span');
     divTaskDetail.className = 'collapsible-body';
     divTaskDetail.appendChild(document.createTextNode(task.taskDetailValue));
 
     // So we add the text entered to create the new task to be the name of a new collection-item
-    li.appendChild(document.createTextNode(taskInput.value));
+    // li.appendChild(document.createTextNode(taskInput.value));
     li.appendChild(divTaskValue);
     li.appendChild(divTaskDetail);
 
@@ -41,10 +41,11 @@ class UI {
     link.innerHTML = '<i class="fa fa-remove"></i>'; // add an icon to the link
     li.style.color = 'black';
     li.appendChild(link);
+    // divTaskValue.appendChild(link);
 
     taskList.appendChild(li);
 
-    console.log(taskList, 'task list');
+    // console.log(taskList, 'task list');
   }
 
   showAlert(message, className) {
@@ -60,16 +61,24 @@ class UI {
     // Add The Text of the message to the element
     div.appendChild(document.createTextNode(message));
 
-    // Get the first parent element - the container
-    const container = document.querySelector('.container');
-
     // Get the second parent element - the form
-    const form = document.querySelector('#task-form');
+    const card = document.querySelector('.card');
 
     // So we insert the div into the DOM like so:
-    container.insertBefore(div, form);
+    card.parentNode.insertBefore(div, card);
 
     setTimeout(() => document.querySelector('.alert').remove(), 3000);
+  }
+
+  clearFields() {
+    // Assign all the form values to become empty strings
+    document.querySelector('#task').value = '';
+    document.querySelector('#task-detail').value = '';
+  }
+
+  deleteTask(target) {
+    target.className === 'fa fa-remove' ? target.parentElement.parentElement.remove() : null;
+    // console.log(target.parentElement.parentElement);
   }
 }
 
@@ -102,9 +111,22 @@ function addNewTask(e) {
   const ui = new UI();
 
   ui.addTasksToList(task);
-  console.log(task);
+  // console.log(task);
+
+  // Notify users after adding task
+  ui.showAlert('Task added successfully', 'success');
+
+  // Clear the fields after submission
+  ui.clearFields();
 
   e.preventDefault();
 }
 
-// Current stuff: Display the tasks generated in the list properly
+taskList.addEventListener('click', removeTask);
+
+function removeTask(e) {
+  // Instantiate an object of the ui class
+  const ui = new UI();
+
+  ui.deleteTask(e.target);
+}
