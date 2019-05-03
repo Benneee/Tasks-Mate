@@ -128,14 +128,9 @@ function addNewTask(e) {
 
   const ui = new UI();
 
-  ui.addTasksToList(task);
-  // console.log(task);
-
-  // Notify users after adding task
-  ui.showAlert('Task added successfully', 'success');
-
-  // Clear the fields after submission
-  ui.clearFields();
+  taskValue === '' || taskDetailValue === ''
+    ? ui.showAlert('Please fill in all fields', 'error')
+    : (ui.addTasksToList(task), ui.showAlert('Task added successfully', 'success'), ui.clearFields());
 
   e.preventDefault();
 }
