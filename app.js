@@ -3,6 +3,18 @@
 // The task class will handle creating a task
 // The store class will handle local storage duties
 
+// ToDos -- Tasks-Mate (OOP To-Do List App)
+
+// Add new task -- DONE
+// Display the task -- DONE
+// Clear fields after submitting the task -- DONE
+// Delete task -- DONE
+// Clear ALL tasks
+// Filter through tasks
+// Store tasks in Local Storage
+// Delete task in UI & Local Storage
+// Clear ALL tasks in UI & Local Storage
+
 // The Task Class
 class Task {
   constructor(taskValue, taskDetailValue) {
