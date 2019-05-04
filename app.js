@@ -203,7 +203,10 @@ function removeTask(e) {
 
   ui.deleteTask(e.target);
 
-  let taskDetailValue = e.target.parentElement.previousElementSibling.textContent;
+  let taskDetailValue;
+  if (e.target.parentElement.previousElementSibling.textContent) {
+    taskDetailValue = e.target.parentElement.previousElementSibling.textContent;
+  }
   Store.deleteTasksFromLS(taskDetailValue);
 }
 
