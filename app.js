@@ -4,17 +4,17 @@
 // Display the task -- DONE
 // Clear fields after submitting the task -- DONE
 // Delete task -- DONE
-// Clear ALL tasks
+// Clear ALL tasks -- DONE
 // Filter through tasks
 
 // Time and Date
-// Show real time (dynamically)
-// Show real date (dynamically)
+// Show real time (dynamically) -- DONE
+// Show real date (dynamically) -- DONE
 
 // Local Storage Abilities
-// Store tasks in Local Storage
-// Delete task in UI & Local Storage
-// Clear ALL tasks in UI & Local Storage
+// Store tasks in Local Storage -- DONE
+// Delete task in UI & Local Storage -- DONE
+// Clear ALL tasks in UI & Local Storage -- DONE
 
 // Three classes
 // The UI class will handle UI manipulations
@@ -98,6 +98,66 @@ class UI {
     target.className === 'fa fa-remove' ? target.parentElement.parentElement.remove() : null;
     // console.log(target.parentElement.parentElement);
   }
+
+  setTimeAndDate() {
+    let date = moment().format('MMMM Do YYYY');
+    document.querySelector('.date').innerHTML = date;
+
+    let time = moment().format('h:mm');
+    document.querySelector('.time').innerHTML = time;
+  }
+
+  clearTasks() {
+    let taskList = document.querySelector('ul');
+    while (taskList.firstChild) {
+      taskList.removeChild(taskList.firstChild);
+    }
+  }
+}
+
+class Store {
+  static fetchTasks() {
+    // Initialise a tasks variable
+    let tasks;
+
+    // Now we check if there is an existing task in LS
+    // If there isn't, we set tasks to become an array
+    // Else, we convert the tasks found in the LS to be an object
+
+    tasks = localStorage.getItem('tasks') === null ? [] : JSON.parse(localStorage.getItem('tasks'));
+    return tasks;
+  }
+
+  static addTasksToLS(task) {
+    const tasks = Store.fetchTasks();
+
+    tasks.push(task);
+    localStorage.setItem('tasks', JSON.stringify(tasks));
+  }
+
+  static displayTasks() {
+    const tasks = Store.fetchTasks();
+    // We fetch the pre-existing tasks from the LS
+    // Then call the method that already does this job of displaying and adding tasks to the list
+    tasks.forEach(task => {
+      const ui = new UI();
+      ui.addTasksToList(task);
+    });
+  }
+
+  static deleteTasksFromLS(taskDetailValue) {
+    const tasks = Store.fetchTasks();
+    // console.log(taskTitle);
+
+    tasks.forEach((task, index) => {
+      task.taskDetailValue === taskDetailValue ? tasks.splice(index, 1) : null;
+    });
+    localStorage.setItem('tasks', JSON.stringify(tasks));
+  }
+
+  static clearTasksInLS() {
+    localStorage.clear();
+  }
 }
 
 // The UI Variables
@@ -105,8 +165,8 @@ const card = document.querySelector('.card');
 const date = document.querySelector('.date');
 const time = document.querySelector('.time');
 const taskInput = document.querySelector('#task');
-const filter = document.querySelector('.filter');
-const clearBn = document.querySelector('.clear-tasks');
+const filter = document.querySelector('#filter');
+const clearBtn = document.querySelector('.clear-tasks');
 const form = document.querySelector('#task-form');
 const taskList = document.querySelector('.collection');
 const taskDetail = document.querySelector('#task-detail');
@@ -130,7 +190,7 @@ function addNewTask(e) {
 
   taskValue === '' || taskDetailValue === ''
     ? ui.showAlert('Please fill in all fields', 'error')
-    : (ui.addTasksToList(task), ui.showAlert('Task added successfully', 'success'), ui.clearFields());
+    : (ui.addTasksToList(task), Store.addTasksToLS(task), ui.showAlert('Task added successfully', 'success'), ui.clearFields());
 
   e.preventDefault();
 }
@@ -142,4 +202,54 @@ function removeTask(e) {
   const ui = new UI();
 
   ui.deleteTask(e.target);
+
+  let taskDetailValue = e.target.parentElement.previousElementSibling.textContent;
+  Store.deleteTasksFromLS(taskDetailValue);
+}
+
+// Set the correct time
+document.addEventListener('DOMContentLoaded', setDateTime);
+
+// Load tasks from Local Storage
+document.addEventListener('DOMContentLoaded', Store.displayTasks);
+
+function setDateTime() {
+  const ui = new UI();
+
+  ui.setTimeAndDate();
+}
+
+// Clear All Tasks
+clearBtn.addEventListener('click', clearAllTasks);
+
+function clearAllTasks(e) {
+  const ui = new UI();
+
+  ui.clearTasks();
+
+  // Clear Local Storage of all tasks
+  Store.clearTasksInLS();
+
+  e.preventDefault();
+}
+
+// Filter through tasks
+filter.addEventListener('keyup', fiterTasks);
+
+function fiterTasks(e) {
+  // console.log(e.target.value);
+  const text = e.target.value.toLowerCase();
+
+  // Get all the list items
+  let listItems = document.querySelectorAll('.collection-item');
+  // console.log(listItems);
+
+  // Sort through the list items
+  // Compare the text of the list items with what the user is entering into the filter input
+  // Set the display
+  listItems.forEach(task => {
+    const item = task.firstChild.textContent;
+
+    task.style.display = item.toLowerCase().indexOf(text) !== -1 ? 'block' : 'none';
+  });
 }
