@@ -208,6 +208,7 @@ function removeTask(e) {
     taskDetailValue = e.target.parentElement.previousElementSibling.textContent;
   }
   Store.deleteTasksFromLS(taskDetailValue);
+  ui.showAlert('Task successfully deleted', 'success');
 }
 
 // Set the correct time
